@@ -1,0 +1,100 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Sản phẩm</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Bảng điều khiên</a></li>
+              <li class="breadcrumb-item active">Sản phẩm</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <a href="/product/add" class="btn btn-block btn-primary btn-sm">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Thêm sản phẩm
+                </a>
+              </div>
+              <div class="card-tools">
+                <ul class="pagination pagination-sm float-right">
+                  <%-str%>
+                </ul>
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 10px">STT</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Danh mục</th>
+                    <th style="width: 15%">Chức năng</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% var i=0; data.forEach(function(e){ i++; %>
+                  <tr id="row_<%-e._id%>">
+                    <td><%-i%></td>
+                    <td><%- e.name%></td>
+                    <td>
+                      <div class="progress progress-xs">
+                        <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <a href="/product/edit/<%- e._id%>">
+                        <i class="nav-icon fas fa-edit"></i>
+                      </a>
+                      <a href="javascript:;" data-toggle="modal" data-target="#modal-default<%-e._id%>">
+                        <i class="nav-icon fas fa-trash text-danger"></i>
+                      </a>
+                    </td>
+                  </tr>
+
+                  <div class="modal fade" id="modal-default<%-e._id%>">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Thông báo</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Bạn có chắc chắn muốn xóa <b><%- e.name%></b>??</p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+                          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="xoa('<%-e._id%>')">Xóa ngay</button>
+                        </div>
+                      </div>
+                      <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                  </div>
+                  <!-- /.modal -->
+
+                  <% });%>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

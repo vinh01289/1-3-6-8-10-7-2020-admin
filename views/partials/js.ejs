@@ -1,0 +1,162 @@
+<!-- REQUIRED SCRIPTS -->
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.js"></script>
+
+<!-- OPTIONAL SCRIPTS -->
+<script src="dist/js/demo.js"></script>
+
+<!-- PAGE PLUGINS -->
+<!-- jQuery Mapael -->
+<script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
+<script src="plugins/raphael/raphael.min.js"></script>
+<script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
+<script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
+<!-- ChartJS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+
+<!-- PAGE SCRIPTS -->
+<script src="dist/js/pages/dashboard2.js"></script>
+
+<!-- bs-custom-file-input -->
+<script src="plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+      bsCustomFileInput.init();
+    });
+</script>
+
+<!-- ckeditor -->
+<script src="ckeditor/ckeditor.js"></script>
+<script>CKEDITOR.replace('content');</script>
+
+<% if(link=='product'){ if(url!=''){ %>
+<!-- thêm, chỉnh sửa sản phẩm -->
+<script>
+$(document).ready(function(){ // cú pháp mặc định của jquery
+    $('#formProduct').on('submit', function(e){ // cú pháp sử dụng jquery
+        e.preventDefault(); // chặn load form
+
+        //var formData = new FormData(this);
+
+        //console.log(formData);
+
+        // khai báo biến
+        var name, img, content, id_category, flag=1, kq='';
+
+        // lấy dữ liệu
+        name = $('#name').val();
+        content = $('#content').val();
+        id_category = $('#id_category').val();
+        img = $('#image')[0].files[0];
+
+        // kiểm tra dữ liệu
+
+        // Tên sản phẩm không được rỗng
+        if(name=='')
+        {
+            flag=0;
+            kq += "Tên sản phẩm không được rỗng\n";
+        }
+
+        // Tên sản phẩm >= 10 kí tự
+        if(name.length < 10)
+        {
+            flag=0;
+            kq += "Tên sản phẩm không được nhỏ hơn 10 kí tự\n";
+        }
+
+        // Tên sản phẩm <= 70 kí tự
+        if(name.length > 70)
+        {
+            flag=0;
+            kq += "Tên sản phẩm không được lớn hơn 70 kí tự\n";
+        }
+
+        // Kiểm tra kí tự đặc biệt, ...
+
+        if(flag==1)
+        {
+            // Gửi dữ liệu qua nodejs xử lý
+            $.ajax({
+                url: "product/process_<%-url%>",
+                type: "POST",
+                data: $('#formProduct').serialize(),
+
+                // 3 thông số thêm gửi dữ liệu phần formData
+                //contentType: false,
+                //cache: false,
+                //processData: false,
+
+                // success: function(rs){
+                    
+                //     console.log(rs);
+
+                //     if(rs.kq == 1)
+                //     {
+                //         alert('Đã thêm dữ liệu thành công');
+
+                //         window.location.href = "product/index";
+                //     }
+                //     else if(rs.kq == 2)
+                //     {
+                //         alert('Cập nhật dữ liệu thành công');
+                //     }
+                //     else
+                //     {
+                //         alert(rs.errMsg);
+                //     }
+                    
+                // }
+            }).done(response => {
+                console.log(response)
+            });
+
+            return false;
+        }
+        else
+        {
+            alert(kq);
+        }
+
+        //console.log( img );
+        //alert(1);
+    });
+});
+</script>
+<% }}%>
+<script>
+    function xoa(id)
+    {
+        if(id)
+        {
+            $.ajax({
+                url: "/product/delete",
+                type: "POST",
+                data: {"id":id},
+                success: function(rs){
+
+                    if(rs.kq == 1)
+                    {
+                        $('#row_'+id).remove();
+                    }
+                    else
+                    {
+                        alert('Lỗi! Không xóa được');
+                    }
+
+                    console.log(rs);
+                    
+                }
+            });
+
+            return false;
+        }
+    }
+</script>
